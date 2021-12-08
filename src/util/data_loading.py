@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def load_dataset() -> pd.DataFrame:
-    """ Retrieves the dataset of news articles from cache, if created, otherwise creates dataset for KG. """
+    """ Retrieves the dataset of news articles from cache, if created, otherwise creates dataset for GeNeG. """
     utils.get_logger().info('Data loading: Retrieving dataset of news articles..')
     global __DATASET__
     if '__DATASET__' not in globals():

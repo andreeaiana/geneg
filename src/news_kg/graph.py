@@ -6,13 +6,12 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 from tqdm import tqdm
-from itertools import chain
 from operator import itemgetter
 from thefuzz import process, fuzz
 from difflib import SequenceMatcher
 from typing import List, Set, Dict
-from collections import defaultdict, Counter
-from qwikidata.linked_data_interface import get_entity_dict_from_api
+from collections import defaultdict
+from typing import Dict, Union, Tuple, List
 
 import src.util.rdf as rdf_util
 import src.news_kg.nlp as nlp_util
@@ -60,7 +59,7 @@ class GeNeG(BaseGraph):
             if not len(label) == 1:
                 self._set_attr(node, self.ATTRIBUTE_LABEL, label)
 
-    def get_node_alias(self, node: str) -> Set:
+    def get_node_alias(self, node: str) -> Set[str]:
         """ Returns the alias(es) of a node. """
         if not (news_kg_util.is_geneg_resource(node) or news_kg_util.is_wikidata_resource(node)):
             raise Exception(f'Node {node} is not a resource')
@@ -84,7 +83,7 @@ class GeNeG(BaseGraph):
             raise Exception(f'Node {node} does not have the alias {alias}')
         self._remove_attr_val(node, self.ATTRIBUTE_ALIAS, alias)
 
-    def _set_nodes_attributes(self, nodes_w_attributes: dict, set_label: bool, set_alias: bool) -> None:
+    def _set_nodes_attributes(self, nodes_w_attributes: Dict[str, Union[str, List[str]]], set_label: bool, set_alias: bool) -> None:
         """ Sets the attributes(i.e. label, alias) for a list of nodes. 
 
         Modifies the node variable in place.
@@ -101,79 +100,79 @@ class GeNeG(BaseGraph):
             if set_alias:
                 self.set_node_alias(node, nodes_w_attributes[node][self.ATTRIBUTE_ALIAS])
 
-    def get_edges_by_key(self, key: str) -> Set:
+    def get_edges_by_key(self, key: str) -> Set[Tuple[str, str]]:
         """ Returns all edges with the given key contained in the graph. """
         edges = [(u, v) for u, v, k in self.get_edges(keys=True) if k==key]
         return set(edges)
     
-    def get_geneg_resources(self) -> Set:
+    def get_geneg_resources(self) -> Set[str]:
         """ Returns all the GeNeG resources contained in the graph. """
         geneg_resources = [node for node in self.nodes if news_kg_util.is_geneg_resource(node)]
         return set(geneg_resources)
 
-    def get_wikidata_resources(self) -> Set:
+    def get_wikidata_resources(self) -> Set[str]:
         """ Returns all entities linked to Wikidata. """
         wikidata_resources = [node for node in self.nodes if news_kg_util.is_wikidata_resource(node)]
         return set(wikidata_resources)
     
-    def get_unlinked_resources(self) -> Set:
+    def get_unlinked_resources(self) -> Set[str]:
         """ Returns any resource that is not linked to Wikidata and that does not represent an article or event node. """
         resources = self.get_geneg_resources()
         articles = self.get_article_nodes()
         events = self.get_event_nodes()
         return set(resources).difference(set(articles).union(set(events)))
 
-    def get_article_nodes(self) -> List:
+    def get_article_nodes(self) -> List[str]:
         """ Returns the ids of all nodes representing a GeNeG resource corresponding to an article. """
-        article_nodes = [node for node in self.get_geneg_resources() if len(node)==45 and 'news_' in node and not '_evt' in node]
+        article_nodes = [node for node in self.get_geneg_resources() if len(node)==43 and 'news_' in node and not '_evt' in node]
         return article_nodes
 
-    def get_event_nodes(self) -> List:
+    def get_event_nodes(self) -> List[str]:
         """ Returns the ids of all nodes representing a GeNeG resource corresponding to an event. """
-        event_nodes = [node for node in self.get_geneg_resources() if len(node)==49 and 'news_' in node and '_evt' in node]
+        event_nodes = [node for node in self.get_geneg_resources() if len(node)==47 and 'news_' in node and '_evt' in node]
         return event_nodes
     
-    def get_all_properties(self) -> Set:
+    def get_all_properties(self) -> Set[str]:
         """ Returns all properties used in GeNeG. """
         properties = [k for _, _,k in self.get_edges(keys=True)]
         return set(properties)
 
-    def get_properties_for_node(self, node: str) -> Set:
+    def get_properties_for_node(self, node: str) -> Set[str]:
         """ Returns all properties that the given node has (i.e. given node is the source node of the edge). """
         properties = [k for u, v, k in self.get_edges(keys=True) if u==node]
         return set(properties)
 
-    def get_subjects_for_property(self, prop: str) -> Set:
+    def get_subjects_for_property(self, prop: str) -> Set[str]:
         """ Returns all subject nodes that have the given property (i.e. all source nodes for edges of type 'prop'). """
         source_nodes = [u for u, v, k in self.get_edges(keys=True) if k==prop]
         return set(source_nodes)
 
-    def get_objects_for_property(self, prop: str) -> Set:
+    def get_objects_for_property(self, prop: str) -> Set[str]:
         """ Returns all objects of a given property (i.e. all target nodes for edges of type 'prop'). """
         objects = [v for u, v, k in self.get_edges(keys=True) if k==prop]
         return set(objects)
 
-    def get_edges_for_property(self, prop: str) -> Set:
+    def get_edges_for_property(self, prop: str) -> Set[Tuple[str, str]]:
         """ Returns all pairs of nodes sharing an edge of type 'prop'. """
         nodes = [(u, v) for u, v, k in self.get_edges(keys=True) if k==prop]
         return set(nodes)
 
-    def get_subjects(self, prop: str, target_node: str) -> Set:
+    def get_subjects(self, prop: str, target_node: str) -> Set[str]:
         """ Returns all source nodes for the given property and target node. """
         source_nodes = [u for u, v, k in self.get_edges(keys=True) if k==prop and v==target_node]
         return set(source_nodes)
 
-    def get_objects(self, prop: str, source_node: str) -> Set:
+    def get_objects(self, prop: str, source_node: str) -> Set[str]:
         """ Returns all target nodes for the given property and source node. """
         target_nodes = [v for u, v, k in self.get_edges(keys=True) if k==prop and u==source_node]
         return set(target_nodes)
 
-    def get_source_for_target(self, target_node: str) -> Set:
+    def get_source_for_target(self, target_node: str) -> Set[str]:
         """ Returns, for the given target node, all source nodes for all properties. """
         source_nodes = [u for u, v, _ in self.get_edges(keys=True) if v==target_node]
         return set(source_nodes)
 
-    def get_target_for_source(self, source_node: str) -> Set:
+    def get_target_for_source(self, source_node: str) -> Set[str]:
         """ Returns, for the given source node, all target nodes for all properties. """
         target_nodes = [v for u, v, _ in self.get_edges(keys=True) if u==source_node]
         return set(target_nodes)
@@ -200,7 +199,7 @@ class GeNeG(BaseGraph):
             utils.get_logger().debug(f'Entity {qid} cannot be found in Wikidata.')
         
         
-    def get_wikidata_label(self, qids: list) -> List:
+    def get_wikidata_label(self, qids: list) -> List[str]:
         """ Returns the Wikidata labels of the given entity QIDs, either from the cached map, or by querying Wikidata.
         """
         # Retrieve labels and aliases of Wikidata QIDs that have not been yet mapped
@@ -213,7 +212,7 @@ class GeNeG(BaseGraph):
         return labels
 
     @property
-    def properties_frequencies(self) -> Dict:
+    def properties_frequencies(self) -> Dict[str, float]:
         """ Returns the frequencies of all types of properties in the graph. """
         properties = self.get_all_properties()
         properties_frequencies = dict()
@@ -247,7 +246,7 @@ class GeNeG(BaseGraph):
         return self.properties_frequencies[prop]
 
     @property
-    def nodes_frequencies(self) -> Dict:
+    def nodes_frequencies(self) -> Dict[str, float]:
         """ Returns the frequencies of all types of nodes in the graph. """
         properties = self.get_all_properties()
         properties.remove('https://schema.org/isBasedOn') # This only connects existing article nodes
@@ -351,7 +350,7 @@ class GeNeG(BaseGraph):
         # Add nodes to graph for each article in the dataset
         utils.get_logger().info('GeNeG: Adding new nodes for each article in the dataset..')
         dataset = graph._add_article_nodes(dataset)
-        utils.update_cache('dataset', dataset)
+        # utils.update_cache('dataset', dataset)
         utils.get_logger().info(f'GeNeG: Added {len(graph.nodes)} new nodes to the graph for each article in the dataset.\n')
 
         # Add corresponding edges and nodes to the graph for each feaure of the article
@@ -487,6 +486,7 @@ class GeNeG(BaseGraph):
         If multiple Wikidata resources have the same label, it merges to the one with more aliases. 
         """
         utils.get_logger().info('GeNeG: Merging nodes with identical labels.')
+        
         nodes2merge = list()
 
         for label in self.label2node_map.keys():
@@ -525,6 +525,7 @@ class GeNeG(BaseGraph):
         smilarity is higher than a predefined threshold. 
         """
         utils.get_logger().debug('GeNeG: Merging nodes with similar labels.')
+
         nodes2merge = [(node, self.get_node_label(node)) for node in self.get_unlinked_resources() if not self.get_node_label(node) == None]
 
         matched2wiki_count = 0
@@ -582,6 +583,7 @@ class GeNeG(BaseGraph):
     def _merge_nodes_w_identical_aliases(self) -> None:
         """ Merges nodes with identical aliases, where one is a GeNeG resource, and the other is a Wikidata resource. """
         utils.get_logger().info('GeNeG: Merging nodes with identical aliases.')
+        
         nodes2merge = list()
 
         for alias in self.alias2node_map.keys():
@@ -622,6 +624,7 @@ class GeNeG(BaseGraph):
         smilarity is higher than a predefined threshold. 
         """
         utils.get_logger().debug('GeNeG: Merging nodes with similar aliases.')
+
         nodes2merge = [(node, list(self.get_node_alias(node))) for node in self.get_unlinked_resources() if not self.get_node_alias(node) == None]
 
         matched2wiki_count = 0
@@ -736,7 +739,7 @@ class GeNeG(BaseGraph):
         self._remove_unused_labels_from_map()
         self._remove_unused_aliases_from_map()
 
-    def _remove_nodes_from_mappings(self, nodes_to_remove: list) -> None:
+    def _remove_nodes_from_mappings(self, nodes_to_remove: List[str]) -> None:
         """ Removes the node ids from the given list from the label and alias maps. """
         for node_id in nodes_to_remove:
             label = self.get_node_label(node_id)
@@ -779,11 +782,12 @@ class GeNeG(BaseGraph):
 
     def _add_article_nodes(self, dataset: pd.DataFrame) -> pd.DataFrame:
         """ Add articles as new nodes in the graph. """
-        node_ids = [self._convert_to_geneg_resource() for _ in range(len(dataset))]
+        # node_ids = [self._convert_to_geneg_resource() for _ in range(len(dataset))]
+        node_ids = list(dataset['node_id'])
         self._add_nodes(node_ids)
 
         # Add newly created node IDs to dataframe for disambiguation of articles with the same title
-        dataset['node_id'] = node_ids
+        # dataset['node_id'] = node_ids
         return dataset
 
     def _node_id2idx(self, dataset: pd.DataFrame, node_id: str) -> pd.Int64Index:
@@ -800,7 +804,7 @@ class GeNeG(BaseGraph):
         """ Returns the article node id corresponding to the given event node id. """
         return node_id.split('_evt')[0]
 
-    def _add_node_type_relation(self, source_nodes=None) -> None:
+    def _add_node_type_relation(self, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'rdf:type' between the set of given source nodes and the target node 'schema:NewsArticle'. """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "rdf:type" relations for {len(source_nodes)} nodes.')
@@ -809,7 +813,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_publisher_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_publisher_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:publisher' between the given source node(s) and the publisher of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:publisher" relations for {len(source_nodes)} nodes.')
@@ -845,7 +849,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_provenance_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_provenance_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:url' between the given source node(s) and the provenance URL of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:url" relations for {len(source_nodes)} nodes.')
@@ -856,7 +860,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
     
-    def _add_published_date_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_published_date_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:datePublished' between the given source node(s) and the publishing date of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:datePublished" relations for {len(source_nodes)} nodes.')
@@ -867,7 +871,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_last_modified_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_last_modified_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:dateModified' between the given source node(s) and the modification date of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:dateModified" relations for {len(source_nodes)} nodes.')
@@ -878,7 +882,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_title_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_title_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:headline' between the given source node(s) and the title of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:headline" relations for {len(source_nodes)} nodes.')
@@ -889,7 +893,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_description_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_description_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:abstract' between the given source node(s) and the description of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:abstract" relations for {len(source_nodes)} nodes.')
@@ -902,7 +906,7 @@ class GeNeG(BaseGraph):
         self._add_edges(edges)
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_body_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_body_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:articleBody' between the given source node(s) and the body of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:articleBody" relations for {len(source_nodes)} nodes.')
@@ -949,7 +953,7 @@ class GeNeG(BaseGraph):
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
 
-    def _add_keywords_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_keywords_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:keywords' between the given source node(s) and the news keywords assigned to the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:keywords" relations for {len(source_nodes)} nodes.')
@@ -987,7 +991,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_author_person_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_author_person_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:author' edges between the given source node(s) and the authors of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:author" relations for {len(source_nodes)} (author person) nodes.')
@@ -1025,7 +1029,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_author_organization_relation(self, dataset: pd.DataFrame, source_nodes = None) -> None:
+    def _add_author_organization_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:author' edges between the given source node(s) and the organization authors of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:author" relations for {len(source_nodes)} (author organization) nodes.')
@@ -1063,7 +1067,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_polarity_relation(self, dataset: pd.DataFrame, source_nodes = None) -> None:
+    def _add_polarity_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'geneg:polarity' between the given source node(s) and the body of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
 
@@ -1080,7 +1084,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_event_relation(self, dataset: pd.DataFrame, source_nodes = None) -> None:
+    def _add_event_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds a new node to represent an event mentioned in the news article and an edge of type 'schema:about' for any source node corresponding to an article with at least one named entity extracted. For each added event node, it adds an 'rdf:type' relations. """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:about" relations for {len(source_nodes)} event nodes.')
@@ -1107,7 +1111,7 @@ class GeNeG(BaseGraph):
             dataset.loc[idx]['OTHpart_all'].item()
             ) 
 
-    def _add_event_type_relation(self, source_nodes = None) -> None:
+    def _add_event_type_relation(self, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'rdf:type' between the set of given source nodes and the target node 'sem:Event'. """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "rdf:type" relations for {len(source_nodes)} event nodes.')
@@ -1118,7 +1122,7 @@ class GeNeG(BaseGraph):
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_event_actor_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_event_actor_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'sem:hasActor' edges between the given source node(s) and the extracted person or location entities of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "sem:hasActor" relations for {len(source_nodes)} event nodes (for person entities).')
@@ -1196,7 +1200,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_event_place_relation(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_event_place_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'sem:hasPlace' edges between the given source node(s) and the extracted location entities of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "sem:hasPlace" relations for {len(source_nodes)} event nodes.')
@@ -1238,7 +1242,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_event_mention(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_event_mention(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:mentions' edges between the given source node(s) and the extracted named entities of type 'other' of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
         utils.get_logger().debug(f'GeNeG: Adding "schema:mentions" relations for {len(source_nodes)} event nodes.')
@@ -1280,7 +1284,7 @@ class GeNeG(BaseGraph):
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
-    def _add_event_mention_part(self, dataset: pd.DataFrame, source_nodes=None) -> None:
+    def _add_event_mention_part(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds edges of type 'schema:mentions' edges between the given source node(s) and the extracted named entities parts of types 'PER', 'LOC', 'ORG', and 'OTH', 
         of the corresponding article(s) representing the target node(s). 
         """
@@ -1328,14 +1332,6 @@ class GeNeG(BaseGraph):
         self._set_nodes_attributes(linked_nodes_w_aliases, set_label=False, set_alias=True)
 
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
-
-    def _add_event_timestamp_relation(self) -> None:
-        # TO DO
-        pass
-
-    def _add_topic_relation(self) -> None:
-        # TO DO
-        pass
 
     def _get_overlap_ratio(self, sequence1: str, sequence2: str) -> float:
         """ Returns a measure of sequences' similarity between [0, 1], given by the ratio of number of matches to the total number of elements in both sequences. """ 

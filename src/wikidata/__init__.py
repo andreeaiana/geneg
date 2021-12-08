@@ -5,7 +5,16 @@ from src.wikidata import neighbors_parser as nb_parser
 
 
 def get_k_hop_neighbors(k: int) -> set:
-    """ Retrieves the set of k-hop neigbors from Wikidata for the Wikidata resources in the graph. 
+    """ 
+    Retrieves the set of k-hop neigbors from Wikidata for the Wikidata resources in the graph. 
+    
+    Args:
+        k (:obj:`int`):
+            Number of hops from which the Wikidata neighbors should be retrieved.
+    
+    Returns:
+        :obj:`set`:
+            Set of k-hop Wikidata neighbors.
     """
     utils.get_logger().info(f'Wikidata: Loading {k}-hop neighboring entities into memory..')
 

@@ -11,7 +11,7 @@ def get_base_graph() -> GeNeG:
     global __BASE_GRAPH__
     if '__BASE_GRAPH__' not in globals():
         initializer = lambda: GeNeG.build_base_graph()
-        __BASE_GRAPH__ = utils.load_or_create_cache('geneg_kg_base', initializer)
+        __BASE_GRAPH__ = utils.load_or_create_cache('geneg_base', initializer)
     utils.get_logger().info('GeNeG: Loaded.\n')
     return __BASE_GRAPH__
 
@@ -22,7 +22,7 @@ def get_entities_graph() -> GeNeG:
     global __ENTITIES_GRAPH__
     if '__ENTITIES_GRAPH__' not in globals():
         initializer = lambda: get_base_graph().construct_entities_graph()
-        __ENTITIES_GRAPH__ = utils.load_or_create_cache('geneg_kg_entities', initializer)
+        __ENTITIES_GRAPH__ = utils.load_or_create_cache('geneg_entities', initializer)
     utils.get_logger().info('GeNeG: Loaded.\n')
     return __ENTITIES_GRAPH__
 
@@ -32,7 +32,7 @@ def get_complete_graph() -> GeNeG:
     global __COMPLETE_GRAPH__
     if '__COMPLETE_GRAPH__' not in globals():
         initializer = lambda: get_base_graph().construct_complete_graph()
-        __COMPLETE_GRAPH__ = utils.load_or_create_cache('geneg_kg_complete', initializer)
+        __COMPLETE_GRAPH__ = utils.load_or_create_cache('geneg_complete', initializer)
     utils.get_logger().info('GeNeG: Loaded.\n')
     return __COMPLETE_GRAPH__
 

@@ -3,19 +3,44 @@
 import src.news_kg.nlp as nlp_util
 from qwikidata.linked_data_interface import get_entity_dict_from_api
 from qwikidata.entity import WikidataItem
+from qwikidata.typedefs import EntityDict
+from typing import Tuple, Set, Union
 
 
-def get_attr_dict(qid: str) -> dict:
-    """ Retrieves a dictionary of attributes from Wikidata for a given entity QID. """
+def get_attr_dict(qid: str) -> EntityDict:
+    """ 
+    Retrieves a dictionary of attributes from Wikidata for a given entity QID. 
+
+    Args:
+        qid (:obj:`str`):
+            Wikidata entity QID.
+
+    Returns:
+        :obj:`qwikidata.typedefs.EntityDict`:
+            Dictionary of attributes for the Wikidata entity.
+    """
     attr_dict = get_entity_dict_from_api(qid.split('/')[-1])
     return attr_dict
 
 
-def get_entity_attributes(attr_dict: dict) -> tuple:
-    """ Returns a tuple (label, aliases) containing the lists of labels and aliases for a Wikidata entity. 
-        For labels, the German Wikidata label is selected, if it exists, otherwise the English one. 
-        If the German label differs from the English one, the English label is added as an alias.
-        For aliases, it stores a set of both German and English Wikidata aliases.
+def get_entity_attributes(attr_dict: EntityDict) -> Tuple[Union[str, None], Set[str]]:
+    """ 
+    Retuns the label and set of aliases for a Wikidata entity. 
+    
+    For labels, the German Wikidata label is selected, if it exists, otherwise the English one. 
+    If the German label differs from the English one, the English label is added as an alias.
+    
+    For aliases, it stores a set of both German and English Wikidata aliases.
+    
+    Args:
+        attr_dict (:obj:`qwikidata.typedefs.EntityDict`):
+            Dictionary of attributes for the Wikidata entity.
+
+    Returns:
+        - :obj:`Union[str, None]`:
+            Label of the Wikidata entity.
+        - :obj:`Set[str]`:
+            Set of Wikidata aliases for the entity.
     """
     aliases = set()
     

@@ -10,6 +10,7 @@ NAMESPACE_RENEWRS_RESOURCE = utils.get_config('geneg.namespace.resource')
 NAMESPACE_WIKIDATA_RESOURCE = 'https://www.wikidata.org/wiki/'
 NAMESPACE_WIKIDATA_PROPERTY = 'https://www.wikidata.org/wiki/Property:'
 
+
 def is_geneg_resource(item: str) -> bool:
     return type(item)==str and item.startswith(NAMESPACE_RENEWRS_RESOURCE)
 

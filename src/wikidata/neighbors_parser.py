@@ -6,10 +6,20 @@ from collections import defaultdict
 import src.news_kg.util as news_kg_util
 import src.wikidata.query as wiki_query
 from qwikidata.linked_data_interface import get_entity_dict_from_api
+from typing import List, Tuple
 
-def retrieve_wikidata_neighbors(entities: list) -> set:
-    """ Retrieves all neighbors representing entities 
-    from Wikidata for the given Wikidata entities set.
+
+def retrieve_wikidata_neighbors(entities: List[str]) -> List[Tuple[str, str, str]]:
+    """ 
+    Retrieves all Wikidata neighbors for the given Wikidata entities set.
+    
+    Args:
+        entities (:obj:`List[str]`):
+            List of entities for which neighbors should be retrieved.
+
+    Returns:
+        :obj:`List[Tuple[str, str, str]]`:
+            Wikidata triples.
     """
     utils.get_logger().debug(f'Wikidata: Retrieving neighbors from Wikidata for {len(entities)} entities.')
 
@@ -68,6 +78,6 @@ def retrieve_wikidata_neighbors(entities: list) -> set:
     return list(triples)
 
 
-def initialize_wiki_neighbors_map() -> dict:
+def initialize_wiki_neighbors_map():
     initializer = lambda: defaultdict(set)
     return utils.load_or_create_cache('wiki_neighbors_map', initializer)

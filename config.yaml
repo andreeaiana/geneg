@@ -73,14 +73,14 @@ cache:
     wiki_attributes_map:
         filename: 'wiki_attributes_map'
         version: 1
-    geneg_kg_base:
-        filename: 'geneg_kg_base'
+    geneg_base:
+        filename: 'geneg_base'
         version: 1
-    geneg_kg_entities:
-        filename: 'geneg_kg_entities'
+    geneg_entities:
+        filename: 'geneg_entities'
         version: 1
-    geneg_kg_complete:
-        filename: 'geneg_kg_complete'
+    geneg_complete:
+        filename: 'geneg_complete'
         version: 1
     dataset:
         filename: 'refugees_migration_dataset'

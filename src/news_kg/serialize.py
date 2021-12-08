@@ -8,9 +8,10 @@ from typing import List
 import src.util.rdf as rdf_util
 import src.news_kg.util as news_kg_util
 import src.util.serialize as serialize_util
+from src.news_kg.graph import GeNeG
 
 
-def serialize_base_graph(graph):
+def serialize_base_graph(graph: GeNeG):
     """ Serialize the complete base graph as individual files. """
     utils.get_logger().info('GeNeG: Serializing the base graph as individual files..')
 
@@ -24,7 +25,7 @@ def serialize_base_graph(graph):
 
     utils.get_logger().info('GeNeG: Completed serialization.\n')
 
-def serialize_entities_graph(graph):
+def serialize_entities_graph(graph: GeNeG):
     """ Serialize the complete entity graph as individual files. """
     utils.get_logger().info('GeNeG: Serializing the entity graph as individual files..')
 
@@ -38,7 +39,7 @@ def serialize_entities_graph(graph):
     utils.get_logger().info('GeNeG: Completed serialization.\n')
 
 
-def serialize_complete_graph(graph):
+def serialize_complete_graph(graph: GeNeG):
     """ Serialize the complete graph as individual files. """
     utils.get_logger().info('GeNeG: Serializing the complete graph as individual files..')
 
@@ -54,13 +55,13 @@ def serialize_complete_graph(graph):
     utils.get_logger().info('GeNeG: Completed serialization.\n')
 
 
-def _write_lines_to_file(lines: list, filepath_config: str) -> None:
+def _write_lines_to_file(lines: List, filepath_config: str) -> None:
     filepath = utils.get_results_file(filepath_config)
     with bz2.open(filepath, mode='wt') as f:
         f.writelines(lines)
 
 
-def _get_lines_metadata(graph) -> List:
+def _get_lines_metadata(graph: GeNeG) -> List:
     """ Serialize metadata. """
     utils.get_logger().debug('GeNeG: Serializing metadata..')
     
@@ -90,7 +91,7 @@ def _get_creation_date() -> str:
     return utils.get_config('geneg.creation_date')
 
 
-def _get_lines_instance_types(graph) -> List:
+def _get_lines_instance_types(graph: GeNeG) -> List:
     """ Serialize types of resources. """
     utils.get_logger().debug('GeNeG: Serializing instance types..')
     
@@ -101,7 +102,7 @@ def _get_lines_instance_types(graph) -> List:
     return list_instances_types
 
 
-def _get_lines_instances_metadata_literals(graph) -> List:
+def _get_lines_instances_metadata_literals(graph: GeNeG) -> List:
     """ Serialize metadata facts containing literals (i.e. url, dates, polarity). """
     utils.get_logger().debug('GeNeG: Serializing literal metadata facts..')
 
@@ -109,7 +110,7 @@ def _get_lines_instances_metadata_literals(graph) -> List:
     return _get_lines_instances_relations(graph, properties)
 
 
-def _get_lines_instances_metadata_resources(graph) -> List:
+def _get_lines_instances_metadata_resources(graph: GeNeG) -> List:
     """ Serialize metadata facts containing resources (i.e. publisher, author, keywords). """
     utils.get_logger().debug('GeNeG: Serializing resource metadata facts..')
     
@@ -117,7 +118,7 @@ def _get_lines_instances_metadata_resources(graph) -> List:
     return _get_lines_instances_relations(graph, properties)
 
 
-def _get_lines_instances_content_relations(graph) -> List:
+def _get_lines_instances_content_relations(graph: GeNeG) -> List:
     """ Serialize resource content facts (i.e. title, abstract, article body). """
     utils.get_logger().debug('GeNeG: Serializing resource content facts..')
 
@@ -125,7 +126,7 @@ def _get_lines_instances_content_relations(graph) -> List:
     return _get_lines_instances_relations(graph, properties)
 
 
-def _get_lines_instances_event_mapping(graph) -> List:
+def _get_lines_instances_event_mapping(graph: GeNeG) -> List:
     """ Serialize event mapping for news article resources. """
     utils.get_logger().debug('GeNeG: Serializing mapping of news article resources to events..')
     article_nodes = graph.get_article_nodes()
@@ -139,7 +140,7 @@ def _get_lines_instances_event_mapping(graph) -> List:
     return instance_event_mappings
 
 
-def _get_lines_event_relations(graph) -> List:
+def _get_lines_event_relations(graph: GeNeG) -> List:
     """ Serialize facts about event resources. """
     utils.get_logger().debug('GeNeG: Serializing event resource facts..')
 
@@ -147,7 +148,7 @@ def _get_lines_event_relations(graph) -> List:
     return _get_lines_instances_relations(graph, properties)
 
 
-def _get_lines_wiki_relations(graph) -> List:
+def _get_lines_wiki_relations(graph: GeNeG) -> List:
     """ Serialize facts containing relations from Wikidata. """
     utils.get_logger().debug('GeNeG: Serializing Wiki resource facts..')
 
@@ -155,7 +156,7 @@ def _get_lines_wiki_relations(graph) -> List:
     return _get_lines_instances_relations(graph, properties)
 
 
-def _get_lines_instances_relations(graph, properties:list) -> List:
+def _get_lines_instances_relations(graph: GeNeG, properties: List) -> List:
     """ Serialize resource facts for the given properties. """
     lines_instance_relations = list()
     instances_relations = set()
