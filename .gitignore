@@ -127,3 +127,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project-specific directories
+logs/
+data/cache/
+
+# Project-specific files
+*.ipynb
+
+data/dataset/refugees_migration_nerl_complete.p
+data/dataset/refugees_migration_polarity_scores_complete.csv

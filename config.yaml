@@ -1,0 +1,87 @@
+﻿# -- GeNeG NEWS KNOWLEDGE GRAPH CONFIGURATION --  
+
+geneg:
+    version: '1.0'
+    creation_date: '08.12.2021'
+    namespace:
+        base: 'http://geneg.net/'
+        property: 'http://geneg.net/property/'
+        resource: 'http://geneg.net/resource/'
+    min_unlinked_resource_frequency: 2
+    max_sink_entities_frequency: 2
+    min_token_sort_ratio: 95
+    k_hop: 3
+
+      # -- LOGGING CONFIGURATION -- 
+logging:
+    level: 'DEBUG'
+    to_file: True
+    filename: 'geneg_v1'
+
+# -- SOURCE FILE CONFIGURATION --
+files:
+    dataset:
+        filename: 'refugees_migration_nerl.p'
+    polarity_scores:
+        filename: 'refugees_migration_polarity_scores.csv'
+
+# -- RESULT FILE CONFIGURATION -- 
+results:
+    geneg_base:
+        metadata: 'geneg_base-metadata.nt.bz2' # void description
+        instances_types: 'geneg_base-instances_types.nt.bz2' # instances types (articles and events)
+        instances_metadata_literals: 'geneg_base-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
+        instances_metadata_resources: 'geneg_base-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
+        instances_content_relations: 'geneg_base-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)
+        instances_event_mapping: 'geneg_base-instances_event_mapping.nt.bz2' # mapping of news article resources to events
+        event_relations: 'geneg_base-event_relations.nt.bz2' # event relations (actors, places, mentions)
+    geneg_entities:
+        metadata: 'geneg_entities-metadata.nt.bz2' # void description
+        instances_types: 'geneg_entities-instances_types.nt.bz2' # instances types (articles and events)
+        instances_metadata_resources: 'geneg_entities-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
+        instances_event_mapping: 'geneg_entities-instances_event_mapping.nt.bz2' # mapping of news article resources to events
+        event_relations: 'geneg_entities-event_relations.nt.bz2' # event relations (actors, places, mentions)
+        wiki_relations: 'geneg_entities-wiki_relations.nt.bz2' # wiki relations
+    geneg_complete:
+        metadata: 'geneg_complete-metadata.nt.bz2' # void description
+        instances_types: 'geneg_complete-instances_types.nt.bz2' # instances types (articles and events)
+        instances_metadata_literals: 'geneg_complete-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
+        instances_metadata_resources: 'geneg_complete-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
+        instances_content_relations: 'geneg_complete-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)
+        instances_event_mapping: 'geneg_complete-instances_event_mapping.nt.bz2' # mapping of news article resources to events
+        event_relations: 'geneg_complete-event_relations.nt.bz2' # event relations (actors, places, mentions)
+        wiki_relations: 'geneg_complete-wiki_relations.nt.bz2' # wiki relations
+
+
+# -- CACHE FILE CONFIGURATION -- 
+cache:
+    wiki_neighbors_map:
+        filename: 'wiki_neighbors_map'
+        version: 1
+    wiki_1_hop_neighbors_list:
+        filename: 'wiki_1_hop_neighbors_list'
+        version: 1
+    wiki_2_hop_neighbors_list:
+        filename: 'wiki_2_hop_neighbors_list'
+        version: 1
+    wiki_3_hop_neighbors_list:
+        filename: 'wiki_3_hop_neighbors_list'
+        version: 1
+    wiki_4_hop_neighbors_list:
+        filename: 'wiki_4_hop_neighbors_list'
+        version: 1
+    wiki_attributes_map:
+        filename: 'wiki_attributes_map'
+        version: 1
+    geneg_kg_base:
+        filename: 'geneg_kg_base'
+        version: 1
+    geneg_kg_entities:
+        filename: 'geneg_kg_entities'
+        version: 1
+    geneg_kg_complete:
+        filename: 'geneg_kg_complete'
+        version: 1
+    dataset:
+        filename: 'refugees_migration_dataset'
+        version: 1
