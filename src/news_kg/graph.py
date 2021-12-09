@@ -222,7 +222,7 @@ class GeNeG(BaseGraph):
             elif 'sem' in property_url:
                 prop = property_url.split('#')[-1]
             elif 'geneg' in property_url:
-                prop = 'geneg:' + property_url.split(news_kg_util.NAMESPACE_RENEWRS_PROPERTY)[-1]
+                prop = 'geneg:' + property_url.split(news_kg_util.NAMESPACE_GENEG_PROPERTY)[-1]
             elif 'wiki/Property' in property_url:
                 prop = 'wiki:' + property_url.split(':')[-1]
             else:
@@ -238,7 +238,7 @@ class GeNeG(BaseGraph):
         elif 'sem' in property_url:
             prop = property_url.split('#')[-1]
         elif 'geneg' in property_url:
-            prop = 'geneg:' + property_url.split(news_kg_util.NAMESPACE_RENEWRS_PROPERTY)[-1]
+            prop = 'geneg:' + property_url.split(news_kg_util.NAMESPACE_GENEG_PROPERTY)[-1]
         elif 'wiki/Property' in property_url:
             prop = 'wiki:' + property_url.split(':')[-1]
         else:
@@ -257,7 +257,7 @@ class GeNeG(BaseGraph):
             elif 'sem' in property_url:
                 prop = property_url.split('#')[-1]
             elif 'geneg' in property_url:
-                prop = property_url.split(news_kg_util.NAMESPACE_RENEWRS_PROPERTY)[-1]
+                prop = property_url.split(news_kg_util.NAMESPACE_GENEG_PROPERTY)[-1]
             elif 'wiki/Property' in property_url:
                 prop = 'wiki:' + property_url.split(':')[-1]
             else:

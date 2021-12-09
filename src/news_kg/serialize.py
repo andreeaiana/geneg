@@ -79,7 +79,7 @@ def _get_lines_metadata(graph: GeNeG) -> List:
             serialize_util.as_literal_triple(void_resource, 'http://purl.org/dc/terms/creator', 'Andreea Iana, Heiko Paulheim'),
             serialize_util.as_literal_triple(void_resource, 'http://purl.org/dc/terms/created', _get_creation_date()),
             serialize_util.as_literal_triple(void_resource, 'http://purl.org/dc/terms/publisher', 'Andreea Iana'),
-            serialize_util.as_literal_triple(void_resource, 'http://rdfs.org/ns/void#uriSpace', news_kg_util.NAMESPACE_RENEWRS_RESOURCE),
+            serialize_util.as_literal_triple(void_resource, 'http://rdfs.org/ns/void#uriSpace', news_kg_util.NAMESPACE_GENEG_RESOURCE),
             serialize_util.as_literal_triple(void_resource, 'http://rdfs.org/ns/void#entities', entity_count),
             serialize_util.as_literal_triple(void_resource, 'http://rdfs.org/ns/void#properties', property_count),
 #            serialize_util.as_object_triple(void_resource, 'http://xmlns.com/foaf/0.1/homepage', 'http://geneg.net'),
