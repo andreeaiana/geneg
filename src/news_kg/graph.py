@@ -782,12 +782,11 @@ class GeNeG(BaseGraph):
 
     def _add_article_nodes(self, dataset: pd.DataFrame) -> pd.DataFrame:
         """ Add articles as new nodes in the graph. """
-        # node_ids = [self._convert_to_geneg_resource() for _ in range(len(dataset))]
-        node_ids = list(dataset['node_id'])
+        node_ids = [self._convert_to_geneg_resource() for _ in range(len(dataset))]
         self._add_nodes(node_ids)
 
         # Add newly created node IDs to dataframe for disambiguation of articles with the same title
-        # dataset['node_id'] = node_ids
+        dataset['node_id'] = node_ids
         return dataset
 
     def _node_id2idx(self, dataset: pd.DataFrame, node_id: str) -> pd.Int64Index:

@@ -131,6 +131,7 @@ dmypy.json
 # Project-specific directories
 logs/
 data/cache/
+results/complete/
 
 # Project-specific files
 *.ipynb
