@@ -1,0 +1,11 @@
+pandas
+numpy
+bz2
+yaml
+tqdm
+qwikidata
+networkx
+thefuzz
+difflib
+validators
+titlecase
