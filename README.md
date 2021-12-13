@@ -35,7 +35,7 @@ A sample of  annotated news corpus and the polarity scores used to construct the
 A full version of the news corpus is available [upon request](mailto: andreea@informatik.uni-mannheim.de).
 
 ## Results
-The N-Triple files for all three versions of GeNeG can be found in the `results` folder. Due to copyright issues, these do not include information about the abstract and bodies of the news articles. 
+The gzipped N-Triples files for all three versions of GeNeG can be found in the `results` folder, together with a corresponding [description](results/README.md). Due to copyright issues, these do not include information about the abstract and bodies of the news articles. 
 
 The files correspnding to the full version of GeNeG are avaiable [upon request](mailto: andreea@informatik.uni-mannheim.de).
 
