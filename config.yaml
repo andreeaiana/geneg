@@ -30,6 +30,7 @@ results:
     geneg_base:
         metadata: 'geneg_base-metadata.nt.bz2' # void description
         instances_types: 'geneg_base-instances_types.nt.bz2' # instances types (articles and events)
+        instances_labels: 'geneg_base-instances_labels.nt.bz2' # instances labels
         instances_metadata_literals: 'geneg_base-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
         instances_metadata_resources: 'geneg_base-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
         instances_content_relations: 'geneg_base-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)
@@ -38,6 +39,7 @@ results:
     geneg_entities:
         metadata: 'geneg_entities-metadata.nt.bz2' # void description
         instances_types: 'geneg_entities-instances_types.nt.bz2' # instances types (articles and events)
+        instances_labels: 'geneg_entities-instances_labels.nt.bz2' # instances labels
         instances_metadata_resources: 'geneg_entities-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
         instances_event_mapping: 'geneg_entities-instances_event_mapping.nt.bz2' # mapping of news article resources to events
         event_relations: 'geneg_entities-event_relations.nt.bz2' # event relations (actors, places, mentions)
@@ -45,6 +47,7 @@ results:
     geneg_complete:
         metadata: 'geneg_complete-metadata.nt.bz2' # void description
         instances_types: 'geneg_complete-instances_types.nt.bz2' # instances types (articles and events)
+        instances_labels: 'geneg_complete-instances_labels.nt.bz2' # instances labels
         instances_metadata_literals: 'geneg_complete-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
         instances_metadata_resources: 'geneg_complete-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
         instances_content_relations: 'geneg_complete-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)

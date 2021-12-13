@@ -17,6 +17,7 @@ def serialize_base_graph(graph: GeNeG):
 
     _write_lines_to_file(_get_lines_metadata(graph), 'results.geneg_base.metadata')
     _write_lines_to_file(_get_lines_instance_types(graph), 'results.geneg_base.instances_types')
+    _write_lines_to_file(_get_lines_instances_labels(graph), 'results.geneg_base.instances_labels')
     _write_lines_to_file(_get_lines_instances_metadata_literals(graph), 'results.geneg_base.instances_metadata_literals')
     _write_lines_to_file(_get_lines_instances_metadata_resources(graph), 'results.geneg_base.instances_metadata_resources')
     _write_lines_to_file(_get_lines_instances_content_relations(graph), 'results.geneg_base.instances_content_relations')
@@ -31,6 +32,7 @@ def serialize_entities_graph(graph: GeNeG):
 
     _write_lines_to_file(_get_lines_metadata(graph), 'results.geneg_entities.metadata')
     _write_lines_to_file(_get_lines_instance_types(graph), 'results.geneg_entities.instances_types')
+    _write_lines_to_file(_get_lines_instances_labels(graph), 'results.geneg_entities.instances_labels')
     _write_lines_to_file(_get_lines_instances_metadata_resources(graph), 'results.geneg_entities.instances_metadata_resources')
     _write_lines_to_file(_get_lines_instances_event_mapping(graph), 'results.geneg_entities.instances_event_mapping')
     _write_lines_to_file(_get_lines_event_relations(graph), 'results.geneg_entities.event_relations')
@@ -45,6 +47,7 @@ def serialize_complete_graph(graph: GeNeG):
 
     _write_lines_to_file(_get_lines_metadata(graph), 'results.geneg_complete.metadata')
     _write_lines_to_file(_get_lines_instance_types(graph), 'results.geneg_complete.instances_types')
+    _write_lines_to_file(_get_lines_instances_labels(graph), 'results.geneg_complete.instances_labels')
     _write_lines_to_file(_get_lines_instances_metadata_literals(graph), 'results.geneg_complete.instances_metadata_literals')
     _write_lines_to_file(_get_lines_instances_metadata_resources(graph), 'results.geneg_complete.instances_metadata_resources')
     _write_lines_to_file(_get_lines_instances_content_relations(graph), 'results.geneg_complete.instances_content_relations')
@@ -129,7 +132,6 @@ def _get_lines_instances_content_relations(graph: GeNeG) -> List:
 def _get_lines_instances_event_mapping(graph: GeNeG) -> List:
     """ Serialize event mapping for news article resources. """
     utils.get_logger().debug('GeNeG: Serializing mapping of news article resources to events..')
-    article_nodes = graph.get_article_nodes()
     event_nodes = graph.get_event_nodes()
 
     instance_event_mappings = list()
@@ -154,6 +156,21 @@ def _get_lines_wiki_relations(graph: GeNeG) -> List:
 
     properties = [prop for prop in graph.get_all_properties() if 'wiki' in prop]
     return _get_lines_instances_relations(graph, properties)
+
+
+def _get_lines_instances_labels(graph:GeNeG) -> List:
+    """ Serialize the labels of instances. """
+    utils.get_logger().debug('GeNeG: Serializing instances labels..')
+    
+    resources = list(graph.get_unlinked_resources().union(graph.get_wikidata_resources()))
+    labels = [graph.get_node_label(resource) for resource in resources]
+    labels = [label if not label == None else 'No label defined' for label in labels]
+
+    instances_labels = list()
+    for instance, label in zip(resources, labels):
+        instances_labels.append(serialize_util.as_literal_triple(instance, rdf_util.PREDICATE_LABEL, label))
+
+    return instances_labels
 
 
 def _get_lines_instances_relations(graph: GeNeG, properties: List) -> List:
