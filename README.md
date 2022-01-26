@@ -3,7 +3,7 @@ GeNeG is a knowledge graph constructed from news articles on the topic of refuge
 
 ### Features
 GeNeG comes in three flavours:
-- **Base GeNeG**: contains testual information, metadata, and linked entities extracted from the articles.
+- **Base GeNeG**: contains textual information, metadata, and linked entities extracted from the articles.
 - **Entities GeNeG**: derived from the Base GeNeG by removing all literal nodes, it contains only resources and it is enriched with three-hop Wikidata neighbors of the entities extracted from the articles.
 - **Complete GeNeG**: the combination of the Base and Entities GeNeG, it contains both literals and resources.
 
@@ -22,7 +22,7 @@ GeNeG comes in three flavours:
 Application-specific parameters, logging, and file-related settings can be configured in `config.yaml`.
 
 
-### Knowledge graph construction
+### Knowledge Graph Construction
 Run the news knowledge graph construction
 ```
 python3 .

@@ -133,11 +133,11 @@ logs/
 results/complete/
 data/cache/*
 !data/cache/node_merging/
-data/cache/node_merging/*_sample.csv
-data/cache/node_merging/*.p
 
 # Project-specific files
 *.ipynb
 
-data/dataset/refugees_migration_nerl_complete.p
-data/dataset/refugees_migration_polarity_scores_complete.csv
+data/cache/node_merging/*_sample.csv
+data/cache/node_merging/*.p
+data/dataset/*_complete.p
+data/dataset/*_complete.csv
