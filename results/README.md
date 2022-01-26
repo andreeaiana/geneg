@@ -1,6 +1,6 @@
 # Results
 
-GeNeG is serialized as [gzipped](https://www.gzip.org/) files in [N-Triples](https://www.w3.org/TR/n-triples/) format. 
+GeNeG is serialized as [gzipped](https://www.gzip.org/) files in [N-Triples](https://www.w3.org/TR/n-triples/) format, and available under a [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/). 
 
 | File | Description | Base GeNeG | Entities GeNeG | Complete GeNeG |
 |------|-------------|------------|----------------|----------------|

@@ -32,12 +32,14 @@ All three versions of GeNeG will be constructed. GeNeG is serialized in N-Triple
 ## Data
 A sample of  annotated news corpus and the polarity scores used to construct the knowledge graph are available in the `data/dataset` folder. Due to copyright policies, this sample does not contain the abstract and body of the articles.
 
-A full version of the news corpus is available [upon request](mailto: andreea@informatik.uni-mannheim.de).
+A full version of the news corpus is available [upon request](mailto:andreea@informatik.uni-mannheim.de).
 
 ## Results
-The gzipped N-Triples files for all three versions of GeNeG can be found in the `results` folder, together with a corresponding [description](results/README.md). Due to copyright issues, these do not include information about the abstract and bodies of the news articles. 
+The [three versions]() of GeNeG are hosted on [Zenodo](https://zenodo.org/). All files are [gzipped](https://www.gzip.org/) and in [N-Triples format](https://www.w3.org/TR/n-triples/). Due to copyright issues, these do not include information about the abstract and bodies of the news articles. 
 
-The files correspnding to the full version of GeNeG are avaiable [upon request](mailto: andreea@informatik.uni-mannheim.de).
+The three versions of GeNeG can also be found in the `results` folder, together with a corresponding [description](results/README.md).  
+
+The files correspnding to the full version of GeNeG are avaiable [upon request](mailto:andreea@informatik.uni-mannheim.de).
 
 
 ## Requirements
@@ -48,4 +50,4 @@ pip3 install -r requirements.txt
 ```
 
 ## License
-Licensed under the MIT License.
+The code is licensed under the MIT License. The data and knowledge graph files are licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License](https://creativecommons.org/licenses/by-nc-sa/4.0/).

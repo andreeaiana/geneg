@@ -133,6 +133,8 @@ logs/
 results/complete/
 data/cache/*
 !data/cache/node_merging/
+data/cache/node_merging/*_sample.csv
+data/cache/node_merging/*.p
 
 # Project-specific files
 *.ipynb
