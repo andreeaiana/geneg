@@ -130,8 +130,9 @@ dmypy.json
 
 # Project-specific directories
 logs/
-data/cache/
 results/complete/
+data/cache/*
+!data/cache/node_merging/
 
 # Project-specific files
 *.ipynb
