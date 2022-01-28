@@ -2,8 +2,8 @@
 GeNeG is a knowledge graph constructed from news articles on the topic of refugees and migration, collected from German online media outlets. GeNeG contains rich textual and metadata information, as well as named entities extracted from the articles' content and metadata and linked to Wikidata. The graph is expanded with up to three-hop neighbors from Wikidata of the initial set of linked entities. 
 
 ### Features
-GeNeG comes in three flavours:
-- **Base GeNeG**: contains textual information, metadata, and linked entities extracted from the articles.
+GeNeG comes in three flavors:
+- **Base GeNeG**: contains textual information, metadata, and entities extracted from the articles.
 - **Entities GeNeG**: derived from the Base GeNeG by removing all literal nodes, it contains only resources and it is enriched with three-hop Wikidata neighbors of the entities extracted from the articles.
 - **Complete GeNeG**: the combination of the Base and Entities GeNeG, it contains both literals and resources.
 
@@ -35,11 +35,9 @@ A sample of  annotated news corpus and the polarity scores used to construct the
 A full version of the news corpus is available [upon request](mailto:andreea@informatik.uni-mannheim.de).
 
 ## Results
-The [three versions]() of GeNeG are hosted on [Zenodo](https://zenodo.org/). All files are [gzipped](https://www.gzip.org/) and in [N-Triples format](https://www.w3.org/TR/n-triples/). Due to copyright issues, these do not include information about the abstract and bodies of the news articles. 
+The [complete GeNeG](https://doi.org/10.5281/zenodo.5913171) is hosted on [Zenodo](https://zenodo.org/). All files are [gzipped](https://www.gzip.org/) and in [N-Triples format](https://www.w3.org/TR/n-triples/). 
 
-The three versions of GeNeG can also be found in the `results` folder, together with a corresponding [description](results/README.md).  
-
-The files correspnding to the full version of GeNeG are avaiable [upon request](mailto:andreea@informatik.uni-mannheim.de).
+A sample of the three versions of GeNeG can also be found in the `results` folder, together with a corresponding [description](results/README.md). Due to copyright policies, this sample does not contain the abstract and body of the articles.
 
 
 ## Requirements
