@@ -21,6 +21,8 @@ PREDICATE_MENTIONS = 'https://schema.org/mentions'
 PREDICATE_HAS_PLACE = 'https://semanticweb.cs.vu.nl/2009/11/sem/hasPlace'
 PREDICATE_HAS_ACTOR = 'https://semanticweb.cs.vu.nl/2009/11/sem/hasActor'
 PREDICATE_POLARITY = news_kg_util.label2geneg_property('polarity') 
+PREDICATE_IN_FAVOR = news_kg_util.label2geneg_property('in_favor')
+PREDICATE_AGAINST = news_kg_util.label2geneg_property('against')
 PREDICATE_TYPE = 'https://www.w3.org/1999/02/22-rdf-syntax-ns#type'
 PREDICATE_LABEL = 'http://www.w3.org/2000/01/rdf-schema#label'
 

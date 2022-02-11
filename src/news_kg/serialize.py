@@ -108,7 +108,7 @@ def _get_lines_instances_metadata_literals(graph: GeNeG) -> List:
     """ Serialize metadata facts containing literals (i.e. url, dates, polarity). """
     utils.get_logger().debug('GeNeG: Serializing literal metadata facts..')
 
-    properties = [rdf_util.PREDICATE_URL, rdf_util.PREDICATE_DATE_PUBLISHED, rdf_util.PREDICATE_DATE_MODIFIED, rdf_util.PREDICATE_POLARITY]
+    properties = [rdf_util.PREDICATE_URL, rdf_util.PREDICATE_DATE_PUBLISHED, rdf_util.PREDICATE_DATE_MODIFIED, rdf_util.PREDICATE_POLARITY, rdf_util.PREDICATE_IN_FAVOR, rdf_util.PREDICATE_AGAINST]
     return _get_lines_instances_relations(graph, properties)
 
 

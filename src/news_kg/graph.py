@@ -368,6 +368,7 @@ class GeNeG(BaseGraph):
         graph._add_author_person_relation(dataset)
         graph._add_author_organization_relation(dataset)
         graph._add_polarity_relation(dataset)
+        graph._add_stance_relation(dataset)
         utils.get_logger().info(f'GeNeG: Added a total of {len(graph.nodes)} nodes and {len(graph.edges)} edges to the graph from the news articles.\n')
         
         utils.get_logger().info('GeNeG: Adding event nodes  and relations to the graph..')
@@ -1067,7 +1068,7 @@ class GeNeG(BaseGraph):
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
 
     def _add_polarity_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
-        """ Adds edges of type 'geneg:polarity' between the given source node(s) and the body of the corresponding article(s) representing the target node(s). """
+        """ Adds edges of type 'geneg:polarity' between the given source node(s) and the polarity score of the corresponding article(s) representing the target node(s). """
         source_nodes = source_nodes if not source_nodes is None else self.get_article_nodes()
 
         # Remove nodes without a polarity score
@@ -1082,6 +1083,10 @@ class GeNeG(BaseGraph):
 
         self._add_edges(zip(source_nodes, target_nodes, edge_type))
         utils.get_logger().debug(f'GeNeG: New graph size of {len(self.nodes)} nodes and {len(self.edges)} edges.')
+
+    def _add_stance_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
+        """ Adds edges of type 'geneg:favor' or "geneg:against" between the given source node(s) and the question. """
+        # TO DO
 
     def _add_event_relation(self, dataset: pd.DataFrame, source_nodes: List[str]=None) -> None:
         """ Adds a new node to represent an event mentioned in the news article and an edge of type 'schema:about' for any source node corresponding to an article with at least one named entity extracted. For each added event node, it adds an 'rdf:type' relations. """

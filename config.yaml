@@ -1,8 +1,8 @@
 ﻿# -- GeNeG NEWS KNOWLEDGE GRAPH CONFIGURATION --  
 
 geneg:
-    version: '1.0'
-    creation_date: '08.12.2021'
+    version: '1.0.1'
+    creation_date: '09.02.2022'
     namespace:
         base: 'http://geneg.net/'
         property: 'http://geneg.net/property/'
@@ -16,7 +16,7 @@ geneg:
 logging:
     level: 'DEBUG'
     to_file: True
-    filename: 'geneg_v1'
+    filename: 'geneg_v1.0.1'
 
 # -- SOURCE FILE CONFIGURATION --
 files:
@@ -24,6 +24,8 @@ files:
         filename: 'refugees_migration_nerl.p'
     polarity_scores:
         filename: 'refugees_migration_polarity_scores.csv'
+    stance_annotatons:
+        filename: 'stance_output_binary_migrations.csv'
 
 # -- RESULT FILE CONFIGURATION -- 
 results:
@@ -31,7 +33,7 @@ results:
         metadata: 'geneg_base-metadata.nt.bz2' # void description
         instances_types: 'geneg_base-instances_types.nt.bz2' # instances types (articles and events)
         instances_labels: 'geneg_base-instances_labels.nt.bz2' # instances labels
-        instances_metadata_literals: 'geneg_base-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
+        instances_metadata_literals: 'geneg_base-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity, stance)
         instances_metadata_resources: 'geneg_base-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
         instances_content_relations: 'geneg_base-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)
         instances_event_mapping: 'geneg_base-instances_event_mapping.nt.bz2' # mapping of news article resources to events
@@ -48,7 +50,7 @@ results:
         metadata: 'geneg_complete-metadata.nt.bz2' # void description
         instances_types: 'geneg_complete-instances_types.nt.bz2' # instances types (articles and events)
         instances_labels: 'geneg_complete-instances_labels.nt.bz2' # instances labels
-        instances_metadata_literals: 'geneg_complete-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity)
+        instances_metadata_literals: 'geneg_complete-instances_metadata_literals.nt.bz2' # instances provenance relations (e.g. url, date published, date modified, polarity, stance)
         instances_metadata_resources: 'geneg_complete-instances_metadata_resources.nt.bz2' # instances metadata resources relations (e.g. publisher, author, keywords)
         instances_content_relations: 'geneg_complete-instances_content_relations.nt.bz2' # instances content relations (e.g. title, abstract, article body)
         instances_event_mapping: 'geneg_complete-instances_event_mapping.nt.bz2' # mapping of news article resources to events
@@ -78,13 +80,13 @@ cache:
         version: 1
     geneg_base:
         filename: 'geneg_base'
-        version: 1
+        version: 1.0.1
     geneg_entities:
         filename: 'geneg_entities'
         version: 1
     geneg_complete:
         filename: 'geneg_complete'
-        version: 1
+        version: 1.0.1
     dataset:
         filename: 'refugees_migration_dataset'
         version: 1

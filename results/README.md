@@ -6,8 +6,8 @@ GeNeG is serialized as [gzipped](https://www.gzip.org/) files in [N-Triples](htt
 |------|-------------|------------|----------------|----------------|
 | geneg_*type*-metadata.nt.bz2     |    Metadata about the dataset, described using void vocabulary.         |   &check;     |          &check;      | &check;     |
 | geneg_*type*-instances_types.nt.bz2     |     Class definitions of articles and events.        |     &check;       |                |        &check;        |
-| geneg_*type*-instances_labels.nt.bz2 |   Labels for instances | &check; | &check; | &check; |
-| geneg_*type*-instances_metadata_literals.nt.bz2   |   Relations between news article resurces and metadata literals (e.g. URL, publishing date, modification date, polarity score).        |     &check;      |                |       &check;         |
+| geneg_*type*-instances_labels.nt.bz2 |   Labels of instances. | &check; | &check; | &check; |
+| geneg_*type*-instances_metadata_literals.nt.bz2   |   Relations between news article resurces and metadata literals (e.g. URL, publishing date, modification date, polarity score, stance).        |     &check;      |                |       &check;         |
 |   geneg_*type*-instances_metadata_resources.nt.bz2   |  Relations between news article resources and metadata entities (i.e. publishers, authors, keywords).           |  &check;          |         &check;       |        &check;        |
 |   geneg_*type*-instances_content_relations.nt.bz2   |  Relations between news article resources and content components (e.g. titles, abstracts, article bodies).      |    &check;       |                |        &check;        |
 |   geneg_*type*-instances_event_mapping.nt.bz2   |   Mapping of news article resources to events.          |    &check;        |         &check;       |          &check;      |
